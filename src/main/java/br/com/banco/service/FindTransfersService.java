@@ -6,11 +6,6 @@ import java.util.Date;
 import java.util.List;
 
 public interface FindTransfersService {
-    List<Transferencia> findTransfersByContaId(String id_conta);
 
-    List<Transferencia> findTransfersByOperador(String operador);
-
-    List<Transferencia> findTransfersByFullFilters(Date fromDate, Date toDate, String operador);
-
-    List<Transferencia> findTransfersByDate(Date fromDate, Date toDate);
+    List<Transferencia> findTranfers(String contaId, String nomeOperador, Date fromDate, Date toDate);
 }

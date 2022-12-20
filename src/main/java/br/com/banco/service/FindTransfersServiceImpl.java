@@ -14,27 +14,32 @@ public class FindTransfersServiceImpl implements FindTransfersService {
     @Autowired
     private TransferenciaRepository transferenciaRepository;
 
-
-
     @Override
-    public List<Transferencia> findTransfersByContaId(String contaId) {
-        long id = java.lang.Long.parseLong(contaId);
-        return transferenciaRepository.findTransfersByContaId(id);
-    }
+    public List<Transferencia> findTranfers(String contaId, String nomeOperador, Date fromDate, Date toDate) {
+        if (contaId != null){
+            if (nomeOperador != null && fromDate != null && toDate != null) {
+                return transferenciaRepository.findTransfersByContaAndFullFilters(contaId, nomeOperador, fromDate, toDate);
+            }
+            else if (nomeOperador != null && fromDate == null && toDate == null){
+                return transferenciaRepository.findTransfersByContaAndOperador(contaId, nomeOperador);
+            }
+            else if (nomeOperador == null && fromDate == null && toDate == null) {
+                return transferenciaRepository.findTransfersByContaId(contaId);
+            }
+            else {
+                return transferenciaRepository.findTransfersByContaAndDate(contaId,fromDate, toDate);
+            }
+        }
+        else {
+            if (nomeOperador != null && fromDate != null && toDate != null) {
+                return transferenciaRepository.findTransfersByFullFilters(nomeOperador, fromDate, toDate);
+            }
+            else if (nomeOperador != null && fromDate == null && toDate == null){
+                return transferenciaRepository.findTransfersByOperador(nomeOperador);
+            } else {
+                return transferenciaRepository.findTransfersByDate(fromDate, toDate);
+            }
+        }
 
-    @Override
-    public List<Transferencia> findTransfersByOperador(String operador) {
-        return transferenciaRepository.findTransfersByOperador(operador);
-    }
-
-    @Override
-    public List<Transferencia> findTransfersByFullFilters(Date fromDate, Date toDate, String operador) {
-        return transferenciaRepository.findTransfersByFullFilters(operador, fromDate, toDate);
-    }
-
-    @Override
-    public List<Transferencia> findTransfersByDate(Date fromDate, Date toDate) {
-
-        return transferenciaRepository.findTransfersByDate(fromDate, toDate);
     }
 }
